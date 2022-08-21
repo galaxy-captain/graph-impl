@@ -1,4 +1,4 @@
-package yaml
+package configs
 
 import (
 	"fmt"
@@ -8,12 +8,21 @@ import (
 	"strings"
 )
 
-func LoadYamlFile(filepath string, obj interface{}) error {
+type Config struct {
+	Server ServerConfig `yaml:"server"`
+}
+
+type ServerConfig struct {
+	Port    string `yaml:"port"`
+	Timeout int    `yaml:"timeout"`
+}
+
+func LoadYamlFile(filepath string) (*Config, error) {
 
 	// read data from file
 	serviceConfigYaml, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	serviceConfigYamlStr := string(serviceConfigYaml)
 
@@ -30,10 +39,11 @@ func LoadYamlFile(filepath string, obj interface{}) error {
 	}
 
 	// deserialize data to object
-	err = yaml.Unmarshal([]byte(serviceConfigYamlStr), obj)
+	config := new(Config)
+	err = yaml.Unmarshal([]byte(serviceConfigYamlStr), config)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return config, nil
 }

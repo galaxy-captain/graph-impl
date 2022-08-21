@@ -1,0 +1,36 @@
+{
+  "workflows": {
+    "workflow_test": {
+      "sections": {
+        "section_test": {
+          "capacity": 100,
+          "nodes": {
+            "node_3": {
+              "class_name": "DemoNode",
+              "input_nodes": [
+                "node_1",
+                "node_2"
+              ],
+              "count": 1
+            },
+            "node_2": {
+              "class_name": "DemoNode",
+              "count": 2
+            },
+            "node_1": {
+              "class_name": "DemoNode",
+              "input_nodes": [
+                "node_0"
+              ],
+              "count": 1
+            },
+            "node_0": {
+              "class_name": "DemoNode",
+              "count": -1
+            }
+          }
+        }
+      }
+    }
+  }
+}

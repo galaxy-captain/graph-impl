@@ -1,21 +1,19 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"grahp-impl/pkg/yaml"
+	"grahp-impl/internal/configs"
 	"os"
 )
 
-type Config struct {
-	Service ServiceConfig `yaml:"service"`
-}
-
-type ServiceConfig struct {
-	Port    string `yaml:"port"`
-	Timeout int    `yaml:"timeout"`
-}
+var ConfigFile = flag.String("config_file", "./configs/%s/service-%s-%s.yaml", "")
 
 func main() {
+
+	flag.Parse()
+
+	var err error
 
 	env := os.Getenv("ENV")
 	serviceScenario := os.Getenv("SRV_SCENARIO")
@@ -28,11 +26,8 @@ func main() {
 		"PORT: %s\n"+
 		"\n", env, serviceScenario, serviceType, port)
 
-	var err error
-
-	filepath := fmt.Sprintf("./configs/%s/service-%s-%s.yaml", serviceScenario, env, serviceType)
-	config := &Config{}
-	err = yaml.LoadYamlFile(filepath, config)
+	configFile := fmt.Sprintf(*ConfigFile, serviceScenario, env, serviceType)
+	config, err := configs.LoadYamlFile(configFile)
 	if err != nil {
 		panic(err)
 	}
